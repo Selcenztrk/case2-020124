@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace case2_020124.Controllers
 {
@@ -7,8 +8,12 @@ namespace case2_020124.Controllers
     public class FileController : ControllerBase
     {
         [HttpGet("fileNames")]
-        public IActionResult GetFileNames(string filePath)
+        public IActionResult GetFileNames(string? filePath)
         {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return BadRequest("filePath cannot be null!");
+            }
             try
             {
                 List<string> fileNames = Directory.GetFileSystemEntries(filePath)
@@ -24,14 +29,18 @@ namespace case2_020124.Controllers
         }
 
         [HttpGet("filterFileNamesByFileExtension")]
-        public IActionResult GetFilteredFileNamesByFileExtension(string filePath, string? keyword)
+        public IActionResult GetFilteredFileNamesByFileExtension(string? filePath, string? keyword)
         {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return BadRequest("filePath cannot be null!");
+            }
             try
             {
                 List<string> fileNames = Directory.GetFileSystemEntries(filePath)
                                                            .Select(Path.GetFileName)
                                                            .ToList();
-                if (keyword.Contains("*"))
+                if (!string.IsNullOrEmpty(keyword) && keyword.Contains("*"))
                 {
                     fileNames = fileNames.Where(p => p.ToLower().StartsWith(keyword.ToLower().Split('*')[0]) && Path.GetExtension(p) == keyword.ToLower().Split('*')[1]).ToList();
                 }
@@ -45,8 +54,6 @@ namespace case2_020124.Controllers
             {
                 return StatusCode(500, new { errorMessage = ex.Message });
             }
-
-
         }
     }
 }
