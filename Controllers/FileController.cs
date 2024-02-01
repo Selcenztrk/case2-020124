@@ -33,12 +33,11 @@ namespace case2_020124.Controllers
                                                            .ToList();
                 if (keyword.Contains("*"))
                 {
-                    fileNames = fileNames.Where(p => p.StartsWith(keyword.Split('*')[0]) && Path.GetExtension(p) == keyword.Split('*')[1]).ToList();
+                    fileNames = fileNames.Where(p => p.ToLower().StartsWith(keyword.ToLower().Split('*')[0]) && Path.GetExtension(p) == keyword.ToLower().Split('*')[1]).ToList();
                 }
                 else
                 {
-                    fileNames = fileNames.Where(file => string.IsNullOrEmpty(keyword) || Path.GetExtension(file) == keyword).ToList();
-
+                    fileNames = fileNames.Where(file => string.IsNullOrEmpty(keyword) || Path.GetExtension(file) == keyword.ToLower()).ToList();
                 }
                 return Ok(new { FileNames = fileNames });
             }
