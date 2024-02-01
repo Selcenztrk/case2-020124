@@ -22,9 +22,9 @@ namespace case2_020124.Controllers
 
                 return Ok(new { FileNames = fileNames });
             }
-            catch (Exception ex)
+            catch (DirectoryNotFoundException ex)
             {
-                return StatusCode(500, new { errorMessage = ex.Message });
+                return StatusCode(500, new { errorMessage = filePath + " file path cannot found!" });
             }
         }
 
@@ -50,9 +50,9 @@ namespace case2_020124.Controllers
                 }
                 return Ok(new { FileNames = fileNames });
             }
-            catch (Exception ex)
+            catch (DirectoryNotFoundException ex)
             {
-                return StatusCode(500, new { errorMessage = ex.Message });
+                return StatusCode(500, new { errorMessage = filePath + " file path cannot found!" });
             }
         }
     }
